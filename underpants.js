@@ -2,6 +2,8 @@
 // other things. For more info:
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode
 'use strict';
+//Functional Library
+// Functional libraries can be imported into other coding projects
 
 var _ = {};
 
@@ -20,7 +22,16 @@ var _ = {};
 *   _.identity(5) === 5
 *   _.identity({a: "b"}) === {a: "b"}
 */
+/*
+I: Function takes in a value. 
+O: Function should return a value. 
+C: The returned value should be unchanged. 
+E:
+*/
 
+_.identity = function(value) {
+    return value;
+}
 
 /** _.typeOf
 * Arguments:
@@ -41,7 +52,26 @@ var _ = {};
 * _.typeOf("javascript") -> "string"
 * _.typeOf([1,2,3]) -> "array"
 */
+/*
+I: Function takes in a value. 
+O: Function returns the value as a string. 
+C:
+E:
+*/
+_.typeOf = function(value) {
+    // Check if array is an array
+    if (Array.isArray(value)) {
+        return "array";
+    }
 
+    // Check for null it returns "object"
+    if (value === null) {
+        return "null";
+    }
+
+    // Check for other types
+    return typeof value;
+};
 
 /** _.first
 * Arguments:
@@ -59,8 +89,36 @@ var _ = {};
 *   _.first(["a", "b", "c"], "ponies") -> "a"
 *   _.first(["a", "b", "c"], 1) -> "a"
 *   _.first(["a", "b", "c"], 2) -> ["a", "b"]
+I: Function takes in a number and an array
+O: Function should return an array
+C:
+E: What if <number> is negative? What if number is greater than array.length?
 */
 
+_.first = function(array, number){
+    // Check if array is not an array
+    if (!Array.isArray(array)) {
+        return [];
+    }
+
+    // If number is not given or not a number, return just the first element in array
+    if (number === undefined || typeof number !== 'number') {
+        return array[0];
+    }
+
+    // If number is negative return empty array
+    if (number < 0) {
+        return [];
+    }
+
+    // If number is greater than array.length return entire array
+    if (number > array.length) {
+        return array;
+    }
+
+    // Otherwise, return the first number items of array
+    return array.slice(0, number);
+};
 
 /** _.last
 * Arguments:
@@ -78,7 +136,36 @@ var _ = {};
 *   _.last(["a", "b", "c"], "ponies") -> "c"
 *   _.last(["a", "b", "c"], 1) -> "c"
 *   _.last(["a", "b", "c"], 2) -> ["b", "c"]
+I:
+O:
+C:
+E:
 */
+
+_.last = function(array, number) {
+    // Check if array is not an array
+    if (!Array.isArray(array)) {
+        return [];
+    }
+
+    // If number is not given or is not a number, return the last element of the array
+    if (number === undefined || typeof number !== 'number') {
+        return array[array.length - 1];
+    }
+
+    // If number is negative return empty array
+    if (number < 0) {
+        return[];
+    }
+
+    // If number is greater than array length return the entire array
+    if (number > array.length) {
+        return array;
+    }
+
+    // Otherwise return the last number items of the array
+    return array.slice(-number);
+};
 
 
 /** _.indexOf
@@ -208,7 +295,29 @@ var _ = {};
 * Examples:
 *   _.map([1,2,3,4], function(e){return e * 2}) -> [2,4,6,8]
 */
-
+_.map = function(collection, func) {
+    // Create ouput array
+    const output = [];
+    // Determine if collection is an array
+    if (Array.isArray(collection)) {
+        for ( let i = 0; i < collection.length; i++) {
+            const result = func(collection[i], i, collection); 
+            output.push(result);
+        }
+    } else { // Else, it's an object
+        // Loop over objrct keys
+        for (let key in collection) {
+            if (collection.hasOwnProperty(key)) {
+                // Call the function with value, key and collection
+                const result = func(collection[key], key, collection);
+                // Push result of func call to output aray
+                output.push(result);
+            }
+        }
+    }
+    // Return output array
+    return output;
+};
 
 /** _.pluck
 * Arguments:
