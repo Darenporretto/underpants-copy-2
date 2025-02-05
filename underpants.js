@@ -136,8 +136,8 @@ _.first = function(array, number){
 *   _.last(["a", "b", "c"], "ponies") -> "c"
 *   _.last(["a", "b", "c"], 1) -> "c"
 *   _.last(["a", "b", "c"], 2) -> ["b", "c"]
-I:
-O:
+I: Function takes in an array and a number
+O: Function shouold return just the last element in array if number is nor given or NaN, or if array is not an array, return [], otherwise, return the last number items of array
 C:
 E:
 */
@@ -182,8 +182,24 @@ _.last = function(array, number) {
 * Examples:
 *   _.indexOf(["a","b","c"], "c") -> 2
 *   _.indexOf(["a","b","c"], "d") -> -1
+I: Function takes in an array and a value. 
+O: Function should return the index of array that is the first occurrance of value. Return -1 if value is not in array
+C: Do not use [].indexOf()
+E:
 */
+_.indexOf = function(array, value) {
+    // Iterate through the array using a for loop
+    // Check if the element matches the value
+    for (let i = 0; i < array.length; i++) {
+        // If current element is equal to the value, return the index
+        if (array[i] === value) {
+            return i;
+        }
+    }
 
+    // If value not found then return -1
+    return -1;
+};
 
 /** _.contains
 * Arguments:
@@ -198,7 +214,16 @@ _.last = function(array, number) {
 *   2) what if no <value> is given?
 * Examples:
 *   _.contains([1,"two", 3.14], "two") -> true
+I: Function takes in an array and a value. 
+O: Function should return true if value if found, otherwise false
+C: Function must use the ternary operator in the implementation.
+E:
 */
+
+_.contains = function(array, value) {
+    // Using the ternary operator to return true if value if found, otherwise false
+    return array.indexOf(value) !== -1 ? true : false;
+}
 
 
 /** _.each
@@ -352,6 +377,23 @@ _.map = function(collection, func) {
 *   _.every([1,2,3], function(e){return e % 2 === 0}) -> false
 */
 
+// _.every = function(collection, func) {
+//     if (Array.isArray(collection)) {
+
+//     }
+// }
+
+
+// _.every([1, 2, 3, 4], function(n){ return n % 2 === 0}); // false (because not every time is even)
+// _.every([2, 4, 6], function(n){ return n % 2 === 0}); // true (every item is even)
+// _.every({ a: 1, b: 2 }, function(n){ return n > 1});// false (not every item is greater than 1)
+// _.every({ a: 3, b: 4 }, function(n){ return n > 1}); /// true (every item is greater than 1)
+
+
+// _.every([1, 2, 3]); // true (because every item is truthy)
+// _.every([1, undefined, 3]); // false (because one item is falsey)
+// _.every({ a: 1, b: 2 }); // true (because all of the values are truthy)
+// _.every({ a: null, b: 2}); // false (because of the values if falsey)
 
 /** _.some
 * Arguments:
