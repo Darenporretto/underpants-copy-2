@@ -673,7 +673,7 @@ _.reduce = function(array, func, seed) {
 
 
 
-/** _.extend
+/** _.extend // Use Object.assign()
 * Arguments:
 *   1) An Object
 *   2) An Object
@@ -695,7 +695,7 @@ E: Function should over ride properties of the same key.
 _.extend = function(target, ...objects) {
     // Iterate through indefinite additional objects passed in
     for (let i = 0; i < objects.length; i++) {
-        // For each object copy all properties to target obj1
+        // For each object copy all properties to target
         for (let key in objects[i]) {
             // Only copy if key is not a prototype property
             if (objects[i].hasOwnProperty(key)) {
@@ -703,7 +703,7 @@ _.extend = function(target, ...objects) {
             }
         }
     }
-    // Return updated obj1
+    // Return updated target
     return target; 
 };
 
