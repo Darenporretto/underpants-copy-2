@@ -26,7 +26,7 @@ var _ = {};
 I: Function takes in a value. 
 O: Function should return a value. 
 C: The returned value should be unchanged. 
-E:
+E: N/A
 */
 
 _.identity = function(value) {
@@ -55,8 +55,8 @@ _.identity = function(value) {
 /*
 I: Function takes in a value. 
 O: Function returns the value as a string. 
-C:
-E:
+C: N/A
+E: N/A
 */
 _.typeOf = function(value) {
     // Check if array is an array
@@ -91,8 +91,8 @@ _.typeOf = function(value) {
 *   _.first(["a", "b", "c"], 2) -> ["a", "b"]
 I: Function takes in a number and an array
 O: Function should return an array
-C:
-E: What if <number> is negative? What if number is greater than array.length?
+C: N/A
+E: Check if number is negative. Check if number is greater than array.length.
 */
 
 _.first = function(array, number){
@@ -116,7 +116,7 @@ _.first = function(array, number){
         return array;
     }
 
-    // Otherwise, return the first number items of array
+    // Otherwise return the first number items of array
     return array.slice(0, number);
 };
 
@@ -138,8 +138,8 @@ _.first = function(array, number){
 *   _.last(["a", "b", "c"], 2) -> ["b", "c"]
 I: Function takes in an array and a number
 O: Function shouold return just the last element in array if number is nor given or NaN, or if array is not an array, return [], otherwise, return the last number items of array
-C:
-E:
+C: N/A
+E: Check if number is negative.  Check if number is greater than array.length. 
 */
 
 _.last = function(array, number) {
@@ -185,7 +185,7 @@ _.last = function(array, number) {
 I: Function takes in an array and a value. 
 O: Function should return the index of array that is the first occurrance of value. Return -1 if value is not in array
 C: Do not use [].indexOf()
-E:
+E: Check if array has multiple occurances of val. Check if val isn't in array. 
 */
 _.indexOf = function(array, value) {
     // Iterate through the array using a for loop
@@ -197,7 +197,7 @@ _.indexOf = function(array, value) {
         }
     }
 
-    // If value not found then return -1
+    // If no matched value found return -1
     return -1;
 };
 
@@ -215,9 +215,9 @@ _.indexOf = function(array, value) {
 * Examples:
 *   _.contains([1,"two", 3.14], "two") -> true
 I: Function takes in an array and a value. 
-O: Function should return true if value if found, otherwise false
+O: Function should return true if value if found, otherwise false. 
 C: Function must use the ternary operator in the implementation.
-E:
+E: Check if no value is given. 
 */
 
 _.contains = function(array, value) {
@@ -240,7 +240,28 @@ _.contains = function(array, value) {
 * Examples:
 *   _.each(["a","b","c"], function(e,i,a){ console.log(e)});
 *      -> should log "a" "b" "c" to the console
+I: Function takes in a collection and a function. 
+O: Function should return elemnts or key value pairs. 
+C: Function must be able to handle arrays and objets. 
+E: If the collection is not an array or an object the implentatoin may fail or do nothing. 
 */
+
+_.each = function(collection, func) {
+    // Check if collection is an array
+    if (Array.isArray(collection)) {
+        for (let i = 0; i < collection.length; i++) {
+            func(collection[i], i, collection);  
+            // Call func with element, index, collection
+        }
+    } else if (typeof collection === 'object' && collection !== null) {
+        for (let key in collection) {
+            if (collection.hasOwnProperty(key)) {
+                func(collection[key], key, collection);  
+                // Call func with value, key, collection
+            }
+        }
+    }
+};
 
 
 /** _.unique
@@ -251,7 +272,27 @@ _.contains = function(array, value) {
 *   2) Use _.indexOf() from above
 * Examples:
 *   _.unique([1,2,2,4,5,6,5,2]) -> [1,2,4,5,6]
+I: Function takes in an array. 
+O: Return a new array of all elements with duplicates removed. 
+C: Use _.indexOf from above. 
+E: If input is empty. 
 */
+
+_.unique = function(array) {
+    // Initialize empty array to store unique elements
+    let uniqueArray = [];
+    
+    // Loop through the original array
+    for (let i = 0; i < array.length; i++) {
+        // Check if the element is not already in the uniqueArray
+        if (_.indexOf(uniqueArray, array[i]) === -1) {
+            uniqueArray.push(array[i]); // Add it to the uniqueArray
+        }
+    }
+    
+    // Return the new array with unique values
+    return uniqueArray;
+};
 
 
 /** _.filter
@@ -268,7 +309,28 @@ _.contains = function(array, value) {
 *   _.filter([1,2,3,4,5], function(x){return x%2 === 0}) -> [2,4]
 * Extra Credit:
 *   use _.each in your implementation
+I: Function takes in an array and a function. 
+O: Function should return a new array of elements for which calling function returned true. 
+C: Should call function for each element passing the arguments: the element, it's index, array. 
+E: Check if function returns something other than true or false.
 */
+
+_.filter = function(array, func) {
+    // Initialize empty array to store elements that pass functions test
+    let result = [];  
+    
+    // Use _.each to iterate through the array
+    _.each(array, function(element, index, array) {
+        // Call the function and check if it returns true
+        if (func(element, index, array)) {
+            // Add element to result if function returns true
+            result.push(element);  
+        }
+    });
+    
+    // Return new array with the filtered values
+    return result;
+};
 
 
 /** _.reject
@@ -282,7 +344,28 @@ _.contains = function(array, value) {
 *   3) This is the logical inverse if _.filter()
 * Examples:
 *   _.reject([1,2,3,4,5], function(e){return e%2 === 0}) -> [1,3,5]
+I: Function takes in an array and a func. 
+O: Function returns a new array of elements for which calling function returned false. 
+C: Function is the inverse of _.filter. 
+E: Function handles non boolean vals retturned by empty arrays and elements. 
 */
+
+_.reject = function(array, func) {
+    // Initialize empty array to hold elements that do not pass 
+    let result = [];
+    
+    // Iterate through the array
+    for (let i = 0; i < array.length; i++) {
+      // If func returns false push the element into the result array
+      if (!func(array[i], i, array)) {
+        result.push(array[i]);
+      }
+    }
+    
+    // Return the result array
+    return result;
+  };
+  
 
 
 /** _.partition
@@ -302,8 +385,33 @@ _.contains = function(array, value) {
 *     return element % 2 === 0;
 *   }); -> [[2,4],[1,3,5]]
 }
+I: Function takes in an arrray and a func. 
+O: Function should return array of arrays. 
+C: Call the function for eac element in arrays passing args. 
+E: Function return should always be an array with truthy and falsy subarrays.
 */
 
+_.partition = function(array, func) {
+    // Initialize two new arrays to store truthy & falsy values
+    let truthy = [];
+    let falsy = [];
+    
+    // Iterate through the array
+    for (let i = 0; i < array.length; i++) {
+      // Call the func with current element. its index. the array. 
+      // If func returns a truthy value push it to the truthy array
+      // Otherwise push it to the falsy array
+      if (func(array[i], i, array)) {
+        truthy.push(array[i]);
+      } else {
+        falsy.push(array[i]);
+      }
+    }
+    
+    // Return an array with the two subarrays
+    return [truthy, falsy];
+  };
+  
 
 /** _.map
 * Arguments:
@@ -319,21 +427,26 @@ _.contains = function(array, value) {
 *   3) return the new array
 * Examples:
 *   _.map([1,2,3,4], function(e){return e * 2}) -> [2,4,6,8]
+I: Function takes in a collection and a func. 
+O: Function returns a new array. 
+C: Must call function for each element in the collection. 
+E:  
 */
 _.map = function(collection, func) {
     // Create ouput array
     const output = [];
-    // Determine if collection is an array
+    // Is the collection an array
     if (Array.isArray(collection)) {
         for ( let i = 0; i < collection.length; i++) {
             const result = func(collection[i], i, collection); 
             output.push(result);
         }
-    } else { // Else, it's an object
+    // Else it's an object    
+    } else { 
         // Loop over objrct keys
         for (let key in collection) {
             if (collection.hasOwnProperty(key)) {
-                // Call the function with value, key and collection
+                // Call the function with value key and collection
                 const result = func(collection[key], key, collection);
                 // Push result of func call to output aray
                 output.push(result);
@@ -353,8 +466,19 @@ _.map = function(collection, func) {
 *   2) You must use _.map() in your implementation.
 * Examples:
 *   _.pluck([{a: "one"}, {a: "two"}], "a") -> ["one", "two"]
+I: Function takes in an array and a property. 
+O: Function returns array of vales removed. 
+C: Function must use _.map() in the implementation. 
+E: If array is empty result will be an ampty array. 
 */
 
+_.pluck = function(array, property) {
+    // Use _.map() to iterate through array and call the function on it
+    return _.map(array, function(element) {
+        // Return an array of the removed values
+        return element[property];
+    });
+};
 
 /** _.every
 * Arguments:
@@ -375,13 +499,56 @@ _.map = function(collection, func) {
 * Examples:
 *   _.every([2,4,6], function(e){return e % 2 === 0}) -> true
 *   _.every([1,2,3], function(e){return e % 2 === 0}) -> false
+I: Function takes in a collection and a func
+O: Function returns true if value of calling function for each element. Otherwise false. 
+C: Function should not have side effects. 
+E: Check if every element is truthy or falsy. This works for both arrays and objects.
 */
 
-// _.every = function(collection, func) {
-//     if (Array.isArray(collection)) {
+_.every = function(collection, func) {
+    // If no func is provided check if all elements are truthy
+    if (func === undefined) {
+        // Check if collection is an array
+        if (Array.isArray(collection)) {
+            for (let i = 0; i < collection.length; i++) {
+                // If any element is falsy
+                if (!collection[i]) { 
+                    return false;
+                }
+            }
+        }
+        // Check collection is an object
+        else {
+            for (let key in collection) {
+                // If any value is falsy
+                if (!collection[key]) { 
+                    return false;
+                }
+            }
+        }
+        // Return true if all elements are truthy
+        return true; 
+    }
 
-//     }
-// }
+    // If function is provided apply it to all elements in collection
+    if (Array.isArray(collection)) {
+        for (let i = 0; i < collection.length; i++) {
+            // If func returns false
+            if (!func(collection[i], i, collection)) { 
+                return false;
+            }
+        }
+    } else {
+        for (let key in collection) {
+            // If func returns false
+            if (!func(collection[key], key, collection)) { 
+                return false;
+            }
+        }
+    }
+    // Return true if func returns true for every element
+    return true; 
+};
 
 
 // _.every([1, 2, 3, 4], function(n){ return n % 2 === 0}); // false (because not every time is even)
@@ -414,7 +581,56 @@ _.map = function(collection, func) {
 * Examples:
 *   _.some([1,3,5], function(e){return e % 2 === 0}) -> false
 *   _.some([1,2,3], function(e){return e % 2 === 0}) -> true
+I: Function takes in an elemnt and a function. 
+O: Function returns true if value of calling function for each element. Otherwise false.
+C: Function should not have side effects. 
+E: Check if every element is truthy or falsy. This works for both arrays and objects.
 */
+
+_.some = function(collection, func) {
+    // If no function provided check for at least one truthy element
+    if (func === undefined) {
+        // Check if collection is an array
+        if (Array.isArray(collection)) {
+            for (let i = 0; i < collection.length; i++) {
+                // If element is truthy
+                if (collection[i]) { 
+                    return true;
+                }
+            }
+        } 
+        // If the collection is an object
+        else {
+            for (let key in collection) {
+                // If value is truthy
+                if (collection[key]) { 
+                    return true;
+                }
+            }
+        }
+        // Return false if no truthy element found
+        return false; 
+    }
+
+    // If function is provided apply it to each element of collection
+    if (Array.isArray(collection)) {
+        for (let i = 0; i < collection.length; i++) {
+            // If func returns true
+            if (func(collection[i], i, collection)) { 
+                return true;
+            }
+        }
+    } else {
+        for (let key in collection) {
+            // If func returns true
+            if (func(collection[key], key, collection)) { 
+                return true;
+            }
+        }
+    }
+    // Return false if func never returns true
+    return false; 
+};
 
 
 /** _.reduce
@@ -434,7 +650,27 @@ _.map = function(collection, func) {
 *   1) What if <seed> is not given?
 * Examples:
 *   _.reduce([1,2,3], function(previousSum, currentValue, currentIndex){ return previousSum + currentValue }, 0) -> 6
+I: Function takes in an array, a function, and a seeed. 
+O: Function should return accumulated result after final iteration. 
+C: A seed must be provided. 
+E: If no seed is provided an error will be thrown. 
 */
+
+_.reduce = function(array, func, seed) {
+    // If no seed is provided use first element as seed
+    let previousResult = seed === undefined ? array[0] : seed;
+    let startIndex = seed === undefined ? 1 : 0;
+
+    // Iterate over the array starting from correct index
+    for (let i = startIndex; i < array.length; i++) {
+        // Apply the function then update the previousResult
+        previousResult = func(previousResult, array[i], i);
+    }
+
+    // Return accumulated result
+    return previousResult;
+};
+
 
 
 /** _.extend
@@ -450,7 +686,27 @@ _.map = function(collection, func) {
 *   var data = {a:"one"};
 *   _.extend(data, {b:"two"}); -> data now equals {a:"one",b:"two"}
 *   _.extend(data, {a:"two"}); -> data now equals {a:"two"}
+I: Function takes in two objjects (...) possibly more. 
+O: Function should return an updated object. 
+C: Function modifies the first obj by copying its properties from additional objects.
+E: Function should over ride properties of the same key. 
 */
+
+_.extend = function(obj1, ...objects) {
+    // Iterate through additional objects passed in
+    for (let i = 0; i < objects.length; i++) {
+        // For each object copy all properties to obj1
+        for (let key in objects[i]) {
+            // Only copy if key is not a prototype property
+            if (objects[i].hasOwnProperty(key)) {
+                obj1[key] = objects[i][key];
+            }
+        }
+    }
+    // Return updated obj1
+    return obj1; 
+};
+
 
 //////////////////////////////////////////////////////////////////////
 // DON'T REMOVE THIS CODE ////////////////////////////////////////////
