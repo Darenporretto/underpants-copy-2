@@ -692,19 +692,19 @@ C: Function modifies the first obj by copying its properties from additional obj
 E: Function should over ride properties of the same key. 
 */
 
-_.extend = function(obj1, ...objects) {
-    // Iterate through additional objects passed in
+_.extend = function(target, ...objects) {
+    // Iterate through indefinite additional objects passed in
     for (let i = 0; i < objects.length; i++) {
-        // For each object copy all properties to obj1
+        // For each object copy all properties to target obj1
         for (let key in objects[i]) {
             // Only copy if key is not a prototype property
             if (objects[i].hasOwnProperty(key)) {
-                obj1[key] = objects[i][key];
+                target[key] = objects[i][key];
             }
         }
     }
     // Return updated obj1
-    return obj1; 
+    return target; 
 };
 
 
