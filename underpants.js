@@ -362,7 +362,7 @@ _.reject = function(array, func) {
       }
     }
     
-    // Return the result array
+    // Return result array
     return result;
   };
   
